@@ -1,0 +1,2 @@
+# 本站尚未启用 AdSense。拿到发布商 ID 后，在 build-sudoku.mjs 顶部填入 ADSENSE_PUB_ID 并重建，本文件会自动生成真实行：
+# google.com, pub-XXXXXXXXXXXXXXXX, DIRECT, f08c47fec0942fa0

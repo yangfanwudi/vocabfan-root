@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>数独技巧：唯一候选、隐性唯一、区块摒除与 X-Wing | 数独扫雷</title>
+<meta name="description" content="系统整理数独的六种核心推理技巧（唯一候选、隐性唯一、区块摒除、数对、X-Wing），并给出数独扫雷模式的排雷与铲雷思路。">
+<meta name="robots" content="index,follow">
+<meta name="google-site-verification" content="fCkfI7h9OU4tstCwhGj9X18s-qxIKQ5c6J4GNo-vES8">
+<link rel="canonical" href="https://vocabfan.online/strategies.html">
+<link rel="alternate" type="application/rss+xml" title="数独扫雷博客 RSS" href="https://vocabfan.online/feed.xml">
+<meta name="theme-color" content="#0f0c29">
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<link rel="icon" type="image/png" sizes="64x64" href="assets/favicon-64.png">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+<meta property="og:site_name" content="数独扫雷">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:title" content="数独技巧：唯一候选、隐性唯一、区块摒除与 X-Wing | 数独扫雷">
+<meta property="og:description" content="系统整理数独的六种核心推理技巧（唯一候选、隐性唯一、区块摒除、数对、X-Wing），并给出数独扫雷模式的排雷与铲雷思路。">
+<meta property="og:url" content="https://vocabfan.online/strategies.html">
+<meta property="og:image" content="https://vocabfan.online/assets/og-cover.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="数独技巧：唯一候选、隐性唯一、区块摒除与 X-Wing | 数独扫雷">
+<meta name="twitter:description" content="系统整理数独的六种核心推理技巧（唯一候选、隐性唯一、区块摒除、数对、X-Wing），并给出数独扫雷模式的排雷与铲雷思路。">
+<meta name="twitter:image" content="https://vocabfan.online/assets/og-cover.jpg">
+<link rel="stylesheet" href="style.css?v=3">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Article","headline":"数独技巧：从唯一候选到 X-Wing（附扫雷模式思路）","description":"系统整理数独的六种核心推理技巧，并给出数独扫雷模式下的排雷与铲雷思路。","inLanguage":"zh-CN","datePublished":"2026-10-28","dateModified":"2026-10-28","author":{"@type":"Organization","name":"数独扫雷"},"mainEntityOfPage":"https://vocabfan.online/strategies.html"}
+</script>
+<!-- Google AdSense：拿到发布商 ID 后，在 build-sudoku.mjs 顶部填入 ADSENSE_PUB_ID 并重建，脚本会自动出现在这里 -->
+<!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script> -->
+</head>
+<body>
+<header class="site-header">
+  <div class="site-header__inner">
+    <a class="brand" href="index.html"><span class="brand__mark">🧩</span><span>数独扫雷</span></a>
+    <nav class="site-nav" aria-label="主导航">
+      <a href="index.html">游戏</a>
+      <a href="how-to-play.html">玩法</a>
+      <a href="strategies.html" class="active" aria-current="page">技巧</a>
+      <a href="blog.html">博客</a>
+      <a href="about.html">关于</a>
+      <a href="feedback.html">反馈</a>
+    </nav>
+    <a class="header-cta" href="index.html#game">开始玩</a>
+  </div>
+</header>
+<main class="page">
+  <p class="crumbs"><a href="index.html">首页</a> / 技巧</p>
+  <h1>数独技巧：从唯一候选到 X-Wing</h1>
+  <p class="page-lead">这篇不讲玄学，只讲能一步步落地的推理。前半是通用数独技巧，后半是「数独扫雷」模式专属的排雷思路。</p>
+
+  <h2>一、唯一候选数（Naked Single）</h2>
+  <p>看一个空格：如果同行、同列、同宫已经出现了 8 个不同数字，那么剩下的那个数字就是唯一解。这是最基础、也最不该错过的一招。每填完一个数字，先扫一遍它所在的行、列、宫，看有没有新的唯一候选。</p>
+
+  <h2>二、隐性唯一（Hidden Single）</h2>
+  <p>在一个宫、一行或一列里，某个数字只有一个格子能放——即使那个格子还有其他候选，这个数字也只能落在这里。隐性唯一比唯一候选更难看见，但它是中盘突破的主要手段。做法是：盯住一个数字（比如 7），看它在每个宫、每行、每列能放的位置。</p>
+
+  <h2>三、区块摒除（Pointing / Claiming）</h2>
+  <p>如果一个数字在某个宫里只能出现在同一行（或同一列）的三个格子内，那么这一行（或列）的其他宫就不能再放这个数字。反过来，如果某数字在一行里只能落在同一个宫，这个宫的其他格子也可以排除它。区块摒除经常能一次性消掉好几个候选。</p>
+
+  <h2>四、数对与三数组</h2>
+  <p>同一行、列或宫里，两个格子的候选都只剩同样的两个数字（比如 {3,8}），那么这两个数字被这两格“占住”，同区域的其他格子可以排除 3 和 8。三个格子共享三个候选时同理。先找“只剩两个候选”的格子，成本最低。</p>
+
+  <h2>五、X-Wing</h2>
+  <p>某个数字在两行里都只能落在同样的两列上，形成一个矩形：那么这两列的其他行都不能再放这个数字。X-Wing 是第一个“跨区域”技巧，看到时通常意味着盘面已经进入中后盘。找不到就先回到隐性唯一和区块摒除，不要硬背图形。</p>
+
+  <h2>六、扫雷模式专属：红底数字怎么用</h2>
+  <p>红底表示“这一格的数字 = 周围 8 格的雷数”。它至少有两个用途：</p>
+  <ul>
+    <li><strong>定位雷区：</strong>红底数字越大，附近雷越密。连续出现的红底数字会圈出一片高概率雷区。</li>
+    <li><strong>反推安全格：</strong>如果某格周围只有 1 颗雷，而它周围已经有一格被确认是雷，那么其他相邻格就相对安全。</li>
+  </ul>
+  <p>注意：红底只是提示，不是“这一格是雷”。真正确定雷的位置，仍然要靠填数后的铲雷条件来判断。</p>
+
+  <h2>七、先填后铲，还是先铲后填？</h2>
+  <p>铲雷需要“相邻且同宫至少 3 个正确数字”。所以正确顺序是：先把雷所在宫、以及它相邻格里的数字填对，再长按铲雷。反过来，先铲会大概率因为条件不足直接结束。遇到不确定的格子，先用标记模式把候选写出来，确认周围至少有 3 个正确数字再动手。</p>
+
+  <h2>八、17 数难题：不要猜</h2>
+  <p>17 个提示的盘面信息量很低，但唯一解仍然存在。遇到卡住时，按这个顺序检查：唯一候选 → 隐性唯一 → 区块摒除 → 数对 → X-Wing。不要靠猜，猜错一次整盘重来。如果实在推不动，先填一个宫的候选，再回头看行和列，通常会有新发现。</p>
+
+  <h2>九、练习路线</h2>
+  <ol>
+    <li>经典模式：先把唯一候选和隐性唯一练到条件反射。</li>
+    <li>简单模式：加入 5 颗雷，练习“先填后铲”的顺序。</li>
+    <li>困难模式：10 颗雷 + 36 个提示，开始用区块摒除和数对。</li>
+    <li>17 数：12 颗雷 + 17 个提示，检验前面所有技巧。</li>
+  </ol>
+
+  <h2>相关阅读</h2>
+  <ul class="related">
+    <li><a href="17-clues.html">17 数数独：为什么 17 个提示是极限？</a></li>
+    <li><a href="sudoku-minesweeper-difference.html">数独扫雷和普通数独有什么区别？</a></li>
+    <li><a href="sudoku-terms.html">数独术语中英对照</a></li>
+  </ul>
+
+  <div class="cta">
+    <a class="btn btn--primary" href="index.html#game">去实践一局</a>
+    <a class="btn btn--ghost" href="how-to-play.html">回看规则</a>
+  </div>
+</main>
+<footer class="site-footer">
+  <div class="site-footer__inner">
+    <div>
+      <h4>数独扫雷</h4>
+      <p>填数独 · 躲地雷。纯前端运行的免费在线小游戏，无需登录，题目每局现场生成。</p>
+    </div>
+    <div>
+      <h4>玩</h4>
+      <a href="index.html#game">在线游戏</a>
+      <a href="how-to-play.html">玩法规则</a>
+      <a href="strategies.html">数独技巧</a>
+      <a href="17-clues.html">17 数数独</a>
+      <a href="daily-sudoku.html">每日挑战</a>
+      <a href="sudoku-minesweeper-difference.html">规则区别</a>
+      <a href="sudoku-terms.html">术语中英对照</a>
+    </div>
+    <div>
+      <h4>站</h4>
+      <a href="blog.html">博客</a>
+      <a href="about.html">关于本站</a>
+      <a href="privacy.html">隐私政策</a>
+      <a href="feedback.html">反馈与建议</a>
+    </div>
+    <div>
+      <h4>支持</h4>
+      <p>把本站分享给一个喜欢数独的朋友，就是最大的支持。</p>
+    </div>
+  </div>
+  <div class="site-footer__bottom">© 2026 数独扫雷 · 非官方站点，与任何游戏厂商无关 · 本站不使用账号系统，游戏数据只留在你的浏览器里。</div>
+</footer>
+<a class="feedback-fab" href="feedback.html" aria-label="反馈与建议">💬 反馈</a>
+
+</body>
+</html>

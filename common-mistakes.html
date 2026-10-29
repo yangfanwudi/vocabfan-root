@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>数独扫雷新手最常犯的 6 个错误 | 数独扫雷</title>
+<meta name="description" content="红底数字当答案、没填够 3 个就铲雷、不写候选、17 数硬猜……6 个数独扫雷新手常见错误，每个都给修正方法。">
+<meta name="robots" content="index,follow">
+<meta name="google-site-verification" content="fCkfI7h9OU4tstCwhGj9X18s-qxIKQ5c6J4GNo-vES8">
+<link rel="canonical" href="https://vocabfan.online/common-mistakes.html">
+<link rel="alternate" type="application/rss+xml" title="数独扫雷博客 RSS" href="https://vocabfan.online/feed.xml">
+<meta name="theme-color" content="#0f0c29">
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<link rel="icon" type="image/png" sizes="64x64" href="assets/favicon-64.png">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+<meta property="og:site_name" content="数独扫雷">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:title" content="数独扫雷新手最常犯的 6 个错误 | 数独扫雷">
+<meta property="og:description" content="红底数字当答案、没填够 3 个就铲雷、不写候选、17 数硬猜……6 个数独扫雷新手常见错误，每个都给修正方法。">
+<meta property="og:url" content="https://vocabfan.online/common-mistakes.html">
+<meta property="og:image" content="https://vocabfan.online/assets/og-cover.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="数独扫雷新手最常犯的 6 个错误 | 数独扫雷">
+<meta name="twitter:description" content="红底数字当答案、没填够 3 个就铲雷、不写候选、17 数硬猜……6 个数独扫雷新手常见错误，每个都给修正方法。">
+<meta name="twitter:image" content="https://vocabfan.online/assets/og-cover.jpg">
+<link rel="stylesheet" href="style.css?v=3">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"数独扫雷新手最常犯的 6 个错误","description":"6 个新手常见错误与修正方法：红底提示、铲雷条件、候选标记、17 数硬猜等。","inLanguage":"zh-CN","datePublished":"2026-10-29","dateModified":"2026-10-29","author":{"@type":"Organization","name":"数独扫雷"},"mainEntityOfPage":"https://vocabfan.online/common-mistakes.html"}</script>
+<!-- Google AdSense：拿到发布商 ID 后，在 build-sudoku.mjs 顶部填入 ADSENSE_PUB_ID 并重建，脚本会自动出现在这里 -->
+<!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script> -->
+</head>
+<body>
+<header class="site-header">
+  <div class="site-header__inner">
+    <a class="brand" href="index.html"><span class="brand__mark">🧩</span><span>数独扫雷</span></a>
+    <nav class="site-nav" aria-label="主导航">
+      <a href="index.html">游戏</a>
+      <a href="how-to-play.html">玩法</a>
+      <a href="strategies.html">技巧</a>
+      <a href="blog.html" class="active" aria-current="page">博客</a>
+      <a href="about.html">关于</a>
+      <a href="feedback.html">反馈</a>
+    </nav>
+    <a class="header-cta" href="index.html#game">开始玩</a>
+  </div>
+</header>
+<main class="page">
+  <p class="crumbs"><a href="index.html">首页</a> / 博客 / 新手错误</p>
+  <h1>数独扫雷新手最常犯的 6 个错误</h1>
+  <p class="article-meta">2026-10-29 · 数独扫雷 · 约 6 分钟</p>
+  <p class="page-lead">数独扫雷的规则不复杂，但新手很容易在同一个地方反复踩坑。下面 6 个错误，按“为什么错 → 怎么改”写；改掉 3 个，通关率就会明显不一样。</p>
+
+  <h2>错误一：把红底数字当成“这格该填的答案”</h2>
+  <p>红底只表示“这一格的数字，恰好等于它周围 8 格里的地雷数”。它是排雷提示，不是这一格的答案；红底数字仍然要满足行、列、宫 1-9 不重复。</p>
+  <p>更常见的误用是：看到红底就以为附近一定有雷，绕着走、不敢填。正确做法是先数红底周围的雷区，判断哪片区域需要先处理，再回到正常数独推理。</p>
+
+  <h2>错误二：没填够 3 个正确数字就长按铲雷</h2>
+  <p>铲雷的条件是：与该雷相邻、且在同一宫里的格子中，至少有 3 个已经填对的数字。条件不满足时长按，会直接结束本局。长按一个没有雷的格子只会提示，不会惩罚。</p>
+  <p>所以铲雷前先做两件事：把雷周围同宫的数字填对；确认这 3 个数字不是猜的。拿不准就先开标记，别用“试一下”换一次失败。</p>
+
+  <h2>错误三：不写候选，靠脑子记</h2>
+  <p>经典模式候选少，脑记还撑得住；困难模式和 17 数模式候选一多，漏一个就会把后面的推理全带偏。本站的标记模式可以给空格写小数字，填入正确数字后，同行、同列、同宫的相同候选会自动清理。</p>
+  <p>建议给自己定一条规则：卡住超过 30 秒，就开标记，把候选写全；先找唯一候选和隐性唯一，再找数对、区块摒除，最后才考虑更深的技巧。</p>
+
+  <div class="ad-slot" data-ad-slot="articleMid"></div>
+
+  <h2>错误四：在 17 数模式里硬猜</h2>
+  <p>17 数只有 17 个提示、12 颗雷，开局几乎没有“唯一候选数”。这种盘面本来就需要更深的排除；连续猜，很容易把一局变成反复试错。</p>
+  <p>如果你在 17 数里卡住，先退回经典或困难模式，把“候选写全、找隐性唯一、找区块”练熟，再回来。17 数是挑战模式，不是入门模式。</p>
+
+  <h2>错误五：忽略“唯一解”这个前提</h2>
+  <p>本站每一局都在挖空时校验唯一解，正常不会出现多解盘面。如果你觉得“有两个答案”，更可能是某一步填错、候选漏了，或者把红底提示当成了答案。</p>
+  <p>排查顺序：先看有没有行/列/宫冲突；再用放大镜检查一个已经填满的宫；最后回到你最后一个“确定”的步骤，看看那个确定是不是猜的。</p>
+
+  <h2>错误六：一上来就玩 17 数或每日挑战</h2>
+  <p>每日挑战固定 10 颗雷、36 个提示，强度接近困难模式；17 数是 12 颗雷、17 个提示。新手直接上，很容易连续失败，然后误以为“这游戏靠运气”。</p>
+  <p>更稳的顺序是：经典 0 雷熟悉规则 → 简单 5 雷熟悉铲雷 → 困难 10 雷练完整流程 → 17 数练高级技巧。每日挑战可以当成每天一次的测验，不要当成教学关。</p>
+
+  <h2>一张 30 秒检查清单</h2>
+  <ul>
+    <li>铲雷前：雷周围同宫是否已经有 3 个正确数字？</li>
+    <li>填数前：这一格是唯一候选，还是我在猜？</li>
+    <li>卡住时：候选写全了吗？有没有漏掉隐性唯一？</li>
+    <li>失败后：是数独冲突，还是铲雷条件不满足？</li>
+  </ul>
+
+  <div class="share">
+    <span>分享：</span>
+    <a href="https://twitter.com/intent/tweet?text=%E6%95%B0%E7%8B%AC%E6%89%AB%E9%9B%B7%E6%96%B0%E6%89%8B%E6%9C%80%E5%B8%B8%E7%8A%AF%E7%9A%84%206%20%E4%B8%AA%E9%94%99%E8%AF%AF&amp;url=https%3A%2F%2Fvocabfan.online%2Fcommon-mistakes.html" target="_blank" rel="noopener">X / Twitter</a>
+    <a href="https://www.reddit.com/submit?url=https%3A%2F%2Fvocabfan.online%2Fcommon-mistakes.html&amp;title=%E6%95%B0%E7%8B%AC%E6%89%AB%E9%9B%B7%E6%96%B0%E6%89%8B%E6%9C%80%E5%B8%B8%E7%8A%AF%E7%9A%84%206%20%E4%B8%AA%E9%94%99%E8%AF%AF" target="_blank" rel="noopener">Reddit</a>
+    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvocabfan.online%2Fcommon-mistakes.html" target="_blank" rel="noopener">Facebook</a>
+    <a href="https://service.weibo.com/share/share.php?url=https%3A%2F%2Fvocabfan.online%2Fcommon-mistakes.html&amp;title=%E6%95%B0%E7%8B%AC%E6%89%AB%E9%9B%B7%E6%96%B0%E6%89%8B%E6%9C%80%E5%B8%B8%E7%8A%AF%E7%9A%84%206%20%E4%B8%AA%E9%94%99%E8%AF%AF" target="_blank" rel="noopener">微博</a>
+    <button type="button" class="copy-link" data-url="https://vocabfan.online/common-mistakes.html">复制链接</button>
+  </div>
+
+  <h2>相关阅读</h2>
+  <ul class="related">
+    <li><a href="how-to-play.html">完整规则：数独 + 扫雷怎么玩</a></li>
+    <li><a href="strategies.html">数独技巧：从唯一候选到 X-Wing</a></li>
+    <li><a href="sudoku-minesweeper-difference.html">数独扫雷和普通数独有什么区别？</a></li>
+    <li><a href="17-clues.html">17 数数独：为什么 17 个提示是极限？</a></li>
+  </ul>
+
+  <div class="ad-slot" data-ad-slot="articleEnd"></div>
+
+  <div class="cta">
+    <a class="btn btn--primary" href="index.html#game">去实战一局</a>
+    <a class="btn btn--ghost" href="difficulty-guide.html">看难度怎么选</a>
+  </div>
+</main>
+<footer class="site-footer">
+  <div class="site-footer__inner">
+    <div>
+      <h4>数独扫雷</h4>
+      <p>填数独 · 躲地雷。纯前端运行的免费在线小游戏，无需登录，题目每局现场生成。</p>
+    </div>
+    <div>
+      <h4>玩</h4>
+      <a href="index.html#game">在线游戏</a>
+      <a href="how-to-play.html">玩法规则</a>
+      <a href="strategies.html">数独技巧</a>
+      <a href="17-clues.html">17 数数独</a>
+      <a href="daily-sudoku.html">每日挑战</a>
+      <a href="sudoku-minesweeper-difference.html">规则区别</a>
+      <a href="sudoku-terms.html">术语中英对照</a>
+    </div>
+    <div>
+      <h4>站</h4>
+      <a href="blog.html">博客</a>
+      <a href="about.html">关于本站</a>
+      <a href="privacy.html">隐私政策</a>
+      <a href="feedback.html">反馈与建议</a>
+    </div>
+    <div>
+      <h4>支持</h4>
+      <p>把本站分享给一个喜欢数独的朋友，就是最大的支持。</p>
+    </div>
+  </div>
+  <div class="site-footer__bottom">© 2026 数独扫雷 · 非官方站点，与任何游戏厂商无关 · 本站不使用账号系统，游戏数据只留在你的浏览器里。</div>
+</footer>
+<a class="feedback-fab" href="feedback.html" aria-label="反馈与建议">💬 反馈</a>
+<script>
+document.querySelectorAll('.copy-link').forEach(function (btn) {
+  btn.addEventListener('click', function () {
+    var url = btn.getAttribute('data-url');
+    function done() {
+      btn.textContent = '已复制';
+      setTimeout(function () { btn.textContent = '复制链接'; }, 1500);
+    }
+    function fallback() {
+      var ta = document.createElement('textarea');
+      ta.value = url;
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy'); done(); } catch (e) {}
+      document.body.removeChild(ta);
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url).then(done, fallback);
+    } else fallback();
+  });
+});
+</script>
+</body>
+</html>

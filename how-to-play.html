@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>数独扫雷怎么玩？完整规则与铲雷条件 | 数独扫雷</title>
+<meta name="description" content="数独扫雷完整规则：数独填数、红底雷数提示、长按铲雷的三个正确数字条件、放大镜与标记模式，以及四种难度 + 每日挑战说明。">
+<meta name="robots" content="index,follow">
+<meta name="google-site-verification" content="fCkfI7h9OU4tstCwhGj9X18s-qxIKQ5c6J4GNo-vES8">
+<link rel="canonical" href="https://vocabfan.online/how-to-play.html">
+<link rel="alternate" type="application/rss+xml" title="数独扫雷博客 RSS" href="https://vocabfan.online/feed.xml">
+<meta name="theme-color" content="#0f0c29">
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<link rel="icon" type="image/png" sizes="64x64" href="assets/favicon-64.png">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+<meta property="og:site_name" content="数独扫雷">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:title" content="数独扫雷怎么玩？完整规则与铲雷条件 | 数独扫雷">
+<meta property="og:description" content="数独扫雷完整规则：数独填数、红底雷数提示、长按铲雷的三个正确数字条件、放大镜与标记模式，以及四种难度 + 每日挑战说明。">
+<meta property="og:url" content="https://vocabfan.online/how-to-play.html">
+<meta property="og:image" content="https://vocabfan.online/assets/og-cover.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="数独扫雷怎么玩？完整规则与铲雷条件 | 数独扫雷">
+<meta name="twitter:description" content="数独扫雷完整规则：数独填数、红底雷数提示、长按铲雷的三个正确数字条件、放大镜与标记模式，以及四种难度 + 每日挑战说明。">
+<meta name="twitter:image" content="https://vocabfan.online/assets/og-cover.jpg">
+<link rel="stylesheet" href="style.css?v=3">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"HowTo","name":"如何玩数独扫雷","description":"数独扫雷的完整规则：填数独、看红底雷数提示、长按铲雷、用放大镜检查。","totalTime":"PT3M","step":[{"@type":"HowToStep","name":"选择模式","text":"经典 0 雷；简单 5 雷；困难 10 雷；17 数 12 雷。"},{"@type":"HowToStep","name":"像数独一样填数","text":"每行、每列、每个 3×3 宫填入 1-9 且不重复。"},{"@type":"HowToStep","name":"看红底提示并铲雷","text":"数字等于周围 8 格雷数时格子变红；长按空格铲雷，需要相邻同宫至少 3 个正确数字。"},{"@type":"HowToStep","name":"通关","text":"铲完所有雷并正确填完盘面。"}]}
+</script>
+<!-- Google AdSense：拿到发布商 ID 后，在 build-sudoku.mjs 顶部填入 ADSENSE_PUB_ID 并重建，脚本会自动出现在这里 -->
+<!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script> -->
+</head>
+<body>
+<header class="site-header">
+  <div class="site-header__inner">
+    <a class="brand" href="index.html"><span class="brand__mark">🧩</span><span>数独扫雷</span></a>
+    <nav class="site-nav" aria-label="主导航">
+      <a href="index.html">游戏</a>
+      <a href="how-to-play.html" class="active" aria-current="page">玩法</a>
+      <a href="strategies.html">技巧</a>
+      <a href="blog.html">博客</a>
+      <a href="about.html">关于</a>
+      <a href="feedback.html">反馈</a>
+    </nav>
+    <a class="header-cta" href="index.html#game">开始玩</a>
+  </div>
+</header>
+<main class="page">
+  <p class="crumbs"><a href="index.html">首页</a> / 玩法</p>
+  <h1>数独扫雷怎么玩？完整规则</h1>
+  <p class="page-lead">三分钟读完，少炸十局。下面从最基础的数独规则讲到铲雷条件、放大镜和标记模式。</p>
+
+  <div class="card"><strong>30 秒版：</strong>按数独规则填 1-9；红底数字表示周围有雷；长按空格铲雷（相邻同宫至少 3 个正确数字）；铲完雷、填完盘面就赢。</div>
+
+  <h2>一、目标</h2>
+  <p>完成数独，同时找出并铲除所有地雷。两个条件都满足才算通关：盘面每个空格都填对，且雷区全部清除。</p>
+
+  <h2>二、盘面与填数</h2>
+  <p>盘面是标准 9×9：横向 9 格为一行，纵向 9 格为一列，粗线围出的 3×3 为「宫」。每行、每列、每个宫都必须恰好出现 1-9 各一次。</p>
+  <ul>
+    <li>白字是题目给定的数字，不能改。</li>
+    <li>绿字是你填入的数字。</li>
+    <li>红字表示与同行、同列或同宫的数字冲突。</li>
+  </ul>
+
+  <h2>三、地雷与红底提示</h2>
+  <p>部分空格下藏有地雷，数量由模式决定。填到地雷会立即结束本局。</p>
+  <p>当某格的数字恰好等于它周围 8 格中的地雷数时，这一格会显示红色背景。数字越大，附近雷越多；红底是提示，不是让你直接填这个数字。</p>
+
+  <h2>四、铲雷：长按 + 三个正确数字</h2>
+  <p>在填数模式下选中一个空格，长按约半秒即可尝试铲雷。铲雷不是随机的，需要满足条件：<strong>与该雷相邻且同宫的格子里，至少有 3 个已经填对的数字。</strong></p>
+  <ul>
+    <li>成功：该格变蓝，雷被移除，获得 1 个放大镜。</li>
+    <li>条件不满足：铲雷失败，本局结束。</li>
+    <li>长按没有雷的格子：只提示“这里没有雷”，不会惩罚。</li>
+  </ul>
+  <p>所以铲雷的正确顺序通常是：先把雷周围的数字填对，再铲。不要一上来就长按。</p>
+
+  <h2>五、放大镜</h2>
+  <p>每铲一个雷获得 1 个放大镜（有上限）。点击「放大镜」进入检查模式，再点一个已经填满数字的宫：全对会变绿并显示 ✅；有错会显示 ❌，并把错误数字标红。每次检查消耗 1 个放大镜。</p>
+
+  <h2>六、标记模式</h2>
+  <p>点「标记」进入候选模式：选中空格后点数字，添加小号候选标记；再点一次可移除。回到填数模式填入数字后，同行、同列、同宫的相同候选会自动清除。硬题建议先用标记把候选写出来。</p>
+
+  <h2>七、四种难度 + 每日挑战</h2>
+  <ul>
+    <li><strong>经典</strong>：0 颗雷，纯数独，适合热身。</li>
+    <li><strong>每日挑战</strong>：全站同一天同一题，按北京时间日期固定；每天 0 点换题。</li>
+    <li><strong>简单</strong>：5 颗雷，51 个提示。</li>
+    <li><strong>困难</strong>：10 颗雷，36 个提示。</li>
+    <li><strong>17 数</strong>：17 个提示 + 12 颗雷，硬核模式。</li>
+  </ul>
+
+  <h2>八、常见误区</h2>
+  <ul>
+    <li>把红底数字当成“这一格该填的数”——它只是周围雷数提示。</li>
+    <li>雷还没铲就直接填数字——有雷的格子必须先铲。</li>
+    <li>条件不够就长按——会直接结束本局。</li>
+    <li>忽略标记模式——困难以上，候选标记能省很多回头路。</li>
+  </ul>
+
+  <div class="cta">
+    <a class="btn btn--primary" href="index.html#game">去玩一局</a>
+    <a class="btn btn--ghost" href="strategies.html">看进阶技巧</a>
+  </div>
+</main>
+<footer class="site-footer">
+  <div class="site-footer__inner">
+    <div>
+      <h4>数独扫雷</h4>
+      <p>填数独 · 躲地雷。纯前端运行的免费在线小游戏，无需登录，题目每局现场生成。</p>
+    </div>
+    <div>
+      <h4>玩</h4>
+      <a href="index.html#game">在线游戏</a>
+      <a href="how-to-play.html">玩法规则</a>
+      <a href="strategies.html">数独技巧</a>
+      <a href="17-clues.html">17 数数独</a>
+      <a href="daily-sudoku.html">每日挑战</a>
+      <a href="sudoku-minesweeper-difference.html">规则区别</a>
+      <a href="sudoku-terms.html">术语中英对照</a>
+    </div>
+    <div>
+      <h4>站</h4>
+      <a href="blog.html">博客</a>
+      <a href="about.html">关于本站</a>
+      <a href="privacy.html">隐私政策</a>
+      <a href="feedback.html">反馈与建议</a>
+    </div>
+    <div>
+      <h4>支持</h4>
+      <p>把本站分享给一个喜欢数独的朋友，就是最大的支持。</p>
+    </div>
+  </div>
+  <div class="site-footer__bottom">© 2026 数独扫雷 · 非官方站点，与任何游戏厂商无关 · 本站不使用账号系统，游戏数据只留在你的浏览器里。</div>
+</footer>
+<a class="feedback-fab" href="feedback.html" aria-label="反馈与建议">💬 反馈</a>
+
+</body>
+</html>

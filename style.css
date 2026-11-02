@@ -812,6 +812,16 @@ details{background:rgba(255,255,255,.03);border:1px solid var(--line);border-rad
 summary{cursor:pointer;color:#fff;font-weight:600}
 details p{margin:10px 0 0;color:#b8b1cf}
 .ad-slot{margin:26px auto;max-width:970px}
+.all-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:14px;margin:24px 0}
+.all-card{display:flex;flex-direction:column;min-height:190px;padding:18px;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.035);text-decoration:none;transition:transform .16s ease,border-color .16s ease,background .16s ease}
+.all-card:hover{transform:translateY(-2px);border-color:rgba(255,210,0,.42);background:rgba(255,210,0,.055)}
+.all-card .all-top{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:10px}
+.all-card .all-tag{font-size:11px;color:#ffd76a;border:1px solid rgba(255,210,0,.28);background:rgba(255,210,0,.07);border-radius:999px;padding:3px 8px}
+.all-card .all-arrow{color:#7f7899;font-size:15px}
+.all-card h3{font-size:19px;line-height:1.35;margin:0 0 7px;color:#fff}
+.all-card p{font-size:13px;line-height:1.65;color:var(--muted);margin:0}
+.all-card .all-url{margin-top:auto;padding-top:12px;font-size:11px;color:#6f6888;word-break:break-all}
+.all-note{margin:24px 0;padding:14px 16px;border:1px solid rgba(255,210,0,.22);background:rgba(255,210,0,.055);border-radius:12px;color:var(--muted);font-size:13px;line-height:1.8}
 .ad-slot:empty{display:none}
 .ad-slot::before{content:"广告";display:block;text-align:center;font-size:11px;letter-spacing:.08em;color:var(--muted);margin:0 0 6px}
 .site-footer{border-top:1px solid var(--line);margin-top:50px;background:rgba(8,6,18,.6)}

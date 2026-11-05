@@ -208,7 +208,29 @@ h1 {
     background: rgba(33, 150, 243, 0.3);
 }
 
-/* 所有地雷清空后：已铲格变白，明确表示“这里已经没有雷” */
+/* 所有地雷清空后：整块棋盘变白，表示这里已经没有雷 */
+.sudoku-grid.no-mines {
+    background: #d0d0d0;
+    border-color: #bdbdbd;
+}
+
+.sudoku-grid.no-mines .cell {
+    background: #ffffff;
+    color: #202020;
+}
+
+.sudoku-grid.no-mines .cell.given {
+    color: #1b1b1b;
+}
+
+.sudoku-grid.no-mines .cell.player {
+    color: #2e7d32;
+}
+
+.sudoku-grid.no-mines .cell:hover {
+    background: #f1f1f1;
+}
+
 .sudoku-grid.no-mines .cell.shoveled {
     background: #ffffff;
 }

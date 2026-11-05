@@ -129,6 +129,7 @@
             <span class="lg lg-wrong">红字=错误</span>
             <span class="lg lg-shoveled">蓝底=已铲雷</span>
             <span class="lg lg-nomine">白底=确认无雷</span>
+            <span class="lg lg-clue">小数字=周围雷数</span>
         </div>
 
         <!-- 数字键盘 + 缩略图 合并区域（同一个大方框） -->
@@ -174,11 +175,11 @@
             <div class="rules-content">
                 <p><strong>📚 名词说明</strong><br>· <strong>行 / 列</strong>：横向一排 9 格为「行」，纵向一列为「列」<br>· <strong>宫</strong>：被白色粗线围住的 3×3 共 9 个格子，整个盘面共有 9 个宫<br>· <strong>相邻格子</strong>：与某格上下左右及斜向紧挨的格子（最多 8 个，盘面边缘的格子更少）</p>
                 <p><strong>🎯 目标</strong><br>完成数独的同时，找出并铲除所有地雷。</p>
-                <p><strong>🎮 基本玩法</strong><br>· 像普通数独一样填数字（1-9），每行、每列、每个宫内数字不重复<br>· 部分空格藏有地雷，填到地雷则游戏结束<br>· 红色背景的数字 = 该数字等于它相邻 8 个格子中的地雷数，提醒你附近有雷<br>· 有雷的格子必须先铲除，才能填数字</p>
+                <p><strong>🎮 基本玩法</strong><br>· 像普通数独一样填数字（1-9），每行、每列、每个宫内数字不重复<br>· 每格左下角的小数字 = 周围 8 格中的地雷数，所有格子都有<br>· 部分空格藏有地雷，填到地雷则游戏结束<br>· 题目给定数字正好等于相邻雷数时，格子变红提醒你附近有雷<br>· 有雷的格子必须先铲除，才能填数字</p>
                 <p><strong>🪣 铲雷（长按）</strong><br>· 填数模式下点击选中一个空格子，长按它约半秒即可尝试铲雷<br>· 铲雷条件：与该雷相邻且同宫的格子中，至少有 3 个已填对的数字<br>· 铲雷成功后该格变蓝，并获得 1 个放大镜<br>· 铲雷次数不限</p>
                 <p><strong>🔍 放大镜</strong><br>· 铲雷成功可获得放大镜，点击"放大镜"按钮进入检查模式<br>· 点击一个已填满数字的宫，检查该宫内 9 个数字是否全部正确<br>· 全部正确：该宫变绿并显示✅；有错误：显示❌，错误数字标红<br>· 每次检查消耗 1 个放大镜</p>
                 <p><strong>✏️ 标记模式</strong><br>· 点击"标记"按钮进入标记模式<br>· 点击空格子选中，再点数字按钮添加候选标记（小数字）<br>· 再次点击已标记的数字可移除<br>· 回到填数模式填入数字后，同行、同列、同宫中相同的候选标记会自动清除</p>
-                <p><strong>💣 地雷提示</strong><br>· 红色背景的数字 = 相邻 8 个格子中的地雷数，数字越大雷越多<br>· 颜色说明：白字=题目 · 绿字=已填 · 红底=雷数警示 · 红字=错误 · 蓝底=已铲雷 · 白底=确认无雷</p>
+                <p><strong>💣 地雷提示</strong><br>· 每格左下角的小数字 = 周围 8 格中的地雷数，0 也会淡淡显示<br>· 题目给定数字等于该格相邻雷数时，整格变红<br>· 颜色说明：白字=题目 · 绿字=已填 · 红底=数字等于雷数 · 红字=错误 · 蓝底=已铲雷 · 白底=确认无雷</p>
                 <p><strong>🏆 胜利条件</strong><br>· 铲除所有地雷，并正确填完所有空格</p>
             </div>
             <button class="action-btn new-game" id="rules-close-btn">知道了</button>
@@ -309,7 +310,8 @@
             checkedErrors: null, // 检查出的错误 {row: {col: true}}
             conflictGrid: null, // 数独语法冲突 {row: {col: true}}
             shoveled: null,     // 已铲除地雷的格子（9x9 布尔数组，蓝色背景 + 绿✓）
-            noMine: null        // 长按确认没有雷的格子（9x9 布尔数组，白色背景）
+            noMine: null,       // 长按确认没有雷的格子（9x9 布尔数组，白色背景）
+            noGuess: false      // 本局是否通过无猜校验
         };
 
         const gridEl = document.getElementById('sudoku-grid');
@@ -490,7 +492,8 @@
             // 生成数独
             const isDaily = difficulty === 'daily';
             if (isDaily) setRng(mulberry32(dailySeed()));
-            const { puzzle, solution } = generatePuzzle(difficulty);
+            const generated = generatePuzzle(difficulty);
+            const { puzzle, solution } = generated;
             state.puzzle = puzzle;
             state.solution = solution;
 
@@ -504,6 +507,8 @@
 
             // 计算提示
             state.hintMap = calculateHints(state.mineMap);
+            state.noGuess = !!generated.noGuess && !!state.mineMap.noGuess;
+            recomputeConflicts();
 
             // 更新UI
             updateDifficultyButtons();
@@ -609,10 +614,16 @@
                         cell.appendChild(compact);
                     }
 
-                    // 红色提示：该格有数字，且数字恰好等于相邻格子中的雷数
+                    // 红色提示：只对题目给定数字生效
                     if (shouldShowHint(r, c, state.puzzle, state.playerGrid, state.hintMap)) {
                         cell.classList.add('hint');
                     }
+
+                    // 每格显示周围雷数（雷格也显示，避免从徽标有无判断雷位）
+                    const mineBadge = document.createElement('span');
+                    mineBadge.className = 'mine-badge' + (state.hintMap[r][c] === 0 ? ' zero' : '');
+                    mineBadge.textContent = state.hintMap[r][c];
+                    cell.appendChild(mineBadge);
 
                     // 放大镜检查结果：通过的宫整宫变绿，宫左上角显示✅/❌徽标
                     const boxIdx = getBoxIndex(r, c);
@@ -1080,6 +1091,30 @@
         }
 
         // 检查数独语法冲突（同行/列/宫是否有相同数字）
+        function recomputeConflicts() {
+            const grid = Array.from({ length: 9 }, () => ({}));
+            const cells = [];
+            for (let r = 0; r < 9; r++) {
+                for (let c = 0; c < 9; c++) {
+                    if (state.playerGrid[r][c] !== 0) {
+                        cells.push({ r, c, v: state.playerGrid[r][c], box: getBoxIndex(r, c) });
+                    }
+                }
+            }
+            const mark = (r, c) => { grid[r][c] = true; };
+            for (let i = 0; i < cells.length; i++) {
+                for (let j = i + 1; j < cells.length; j++) {
+                    const a = cells[i], b = cells[j];
+                    if (a.v !== b.v) continue;
+                    if (a.r === b.r || a.c === b.c || a.box === b.box) {
+                        mark(a.r, a.c);
+                        mark(b.r, b.c);
+                    }
+                }
+            }
+            state.conflictGrid = grid;
+        }
+
         function hasSudokuConflict(row, col, num) {
             if (num === 0) return false;
             // 检查行
@@ -1169,15 +1204,10 @@
             }
 
             if (num !== 0) {
-                // 检查数独语法冲突
-                if (hasSudokuConflict(row, col, num)) {
-                    if (!state.conflictGrid[row]) state.conflictGrid[row] = {};
-                    state.conflictGrid[row][col] = true;
-                }
-
                 // 自动清除同行/同列/同宫中该数字的候选标记
                 clearMarksAround(row, col, num);
             }
+            recomputeConflicts();
 
             // 检查胜利
             if (checkVictory(state.puzzle, state.solution, state.playerGrid, state.mineMap)) {

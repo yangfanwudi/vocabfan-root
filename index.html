@@ -518,6 +518,8 @@
 
         function renderGrid() {
             gridEl.innerHTML = '';
+            // 所有地雷都铲完后，已铲格由蓝色变为白色，给玩家一个明确的“安全”信号
+            gridEl.classList.toggle('no-mines', state.mineCount === 0);
 
             // 计算选中格子的相关信息（用于高亮）
             let selectedVal = null;
@@ -1041,7 +1043,12 @@
                     state.magnifyCount++;
                 }
 
-                showToast('🪣 铲雷成功！该格已标蓝，+1 放大镜', '🪣');
+                showToast(
+                    state.mineCount === 0
+                        ? '🎉 所有地雷已清空！棋盘变白，继续填完数独'
+                        : '🪣 铲雷成功！该格已标蓝，+1 放大镜',
+                    state.mineCount === 0 ? '🎉' : '🪣'
+                );
 
                 renderGrid();
                 renderNumpad();

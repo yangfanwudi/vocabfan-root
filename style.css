@@ -208,6 +208,15 @@ h1 {
     background: rgba(33, 150, 243, 0.3);
 }
 
+/* 所有地雷清空后：已铲格变白，明确表示“这里已经没有雷” */
+.sudoku-grid.no-mines .cell.shoveled {
+    background: #ffffff;
+}
+
+.sudoku-grid.no-mines .cell.shoveled::after {
+    color: #8a6d3b;
+}
+
 .sudoku-grid .cell.shoveled::after {
     content: '✓';
     position: absolute;

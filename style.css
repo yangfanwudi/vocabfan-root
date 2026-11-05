@@ -242,6 +242,32 @@ h1 {
     box-shadow: inset 0 0 0 2px #ffd200;
 }
 
+/* 每格右下角：周围雷数徽标；0 用极淡样式，避免从有无徽标判断雷位 */
+.sudoku-grid .cell .mine-badge {
+    position: absolute;
+    left: 2px;
+    bottom: 1px;
+    font-size: 9px;
+    line-height: 1;
+    font-weight: 700;
+    color: #b9c9d8;
+    opacity: .78;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.sudoku-grid .cell .mine-badge.zero {
+    opacity: .16;
+}
+
+.sudoku-grid .cell.no-mine .mine-badge {
+    color: #6b6b6b;
+}
+
+.sudoku-grid .cell.shoveled .mine-badge {
+    color: #e3f2fd;
+}
+
 /* 3x3 宫格边框 */
 .cell:nth-child(3n) {
     border-right: 2px solid rgba(255, 255, 255, 0.3);
@@ -741,6 +767,7 @@ h1 {
 .lg-wrong::before { background: transparent; border: 1.5px solid #ef5350; }
 .lg-shoveled::before { background: rgba(33, 150, 243, 0.65); }
 .lg-nomine::before { background: #ffffff; border: 1px solid #999; }
+.lg-clue::before { background: #b9c9d8; }
 
 /* 响应式 */
 @media (max-width: 480px) {

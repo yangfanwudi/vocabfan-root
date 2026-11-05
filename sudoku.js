@@ -102,9 +102,68 @@ function canRemove(board, row, col) {
     return count === 1;
 }
 
-// 从完整解中挖空，生成题目（保证唯一解）
-// difficulty: 'easy' | 'hard' | '17'
-function generatePuzzle(difficulty) {
+// 逻辑求解：只用裸单/隐单，推不动就判定“需要猜”
+function solveLogically(puzzle) {
+    const board = puzzle.map(row => [...row]);
+
+    function candidates(r, c) {
+        const nums = [];
+        for (let n = 1; n <= 9; n++) {
+            if (isValid(board, r, c, n)) nums.push(n);
+        }
+        return nums;
+    }
+
+    while (true) {
+        let progress = false;
+
+        // 裸单
+        for (let r = 0; r < 9; r++) {
+            for (let c = 0; c < 9; c++) {
+                if (board[r][c] !== 0) continue;
+                const nums = candidates(r, c);
+                if (nums.length === 0) return false;
+                if (nums.length === 1) {
+                    board[r][c] = nums[0];
+                    progress = true;
+                }
+            }
+        }
+        if (progress) continue;
+
+        // 隐单：行 / 列 / 宫
+        const units = [];
+        for (let i = 0; i < 9; i++) {
+            const row = [], col = [], box = [];
+            for (let j = 0; j < 9; j++) {
+                row.push([i, j]);
+                col.push([j, i]);
+                const br = Math.floor(i / 3) * 3 + Math.floor(j / 3);
+                const bc = (i % 3) * 3 + (j % 3);
+                box.push([br, bc]);
+            }
+            units.push(row, col, box);
+        }
+        for (const unit of units) {
+            for (let n = 1; n <= 9; n++) {
+                if (unit.some(([r, c]) => board[r][c] === n)) continue;
+                const places = unit.filter(([r, c]) => board[r][c] === 0 && isValid(board, r, c, n));
+                if (places.length === 0) continue;
+                if (places.length === 1) {
+                    board[places[0][0]][places[0][1]] = n;
+                    progress = true;
+                }
+            }
+        }
+
+        if (!progress) break;
+    }
+
+    return board.every(row => row.every(v => v !== 0));
+}
+
+// 从完整解中挖空，生成唯一解题目（不再直接返回，交给 generatePuzzle 做无猜重试）
+function buildPuzzle(difficulty) {
     const solution = generateCompleteSudoku();
     const puzzle = solution.map(row => [...row]);
 
@@ -151,7 +210,24 @@ function generatePuzzle(difficulty) {
     return { puzzle, solution };
 }
 
-// ---------- 地雷逻辑 ----------
+// 生成无猜题目：唯一解 + 只用裸单/隐单可推完
+function generatePuzzle(difficulty) {
+    const maxAttempts = difficulty === '17' ? 6 : 16;
+    let fallback = null;
+
+    for (let attempt = 0; attempt < maxAttempts; attempt++) {
+        const candidate = buildPuzzle(difficulty);
+        if (!fallback) fallback = candidate;
+        if (solveLogically(candidate.puzzle)) {
+            candidate.noGuess = true;
+            return candidate;
+        }
+    }
+
+    fallback = fallback || buildPuzzle(difficulty);
+    fallback.noGuess = false;
+    return fallback;
+}
 
 // 获取某个格子周围8格的所有坐标
 function getNeighbors(row, col) {
@@ -170,7 +246,7 @@ function getNeighbors(row, col) {
 }
 
 // 在空格中随机放置地雷
-function placeMines(puzzle, mineCount) {
+function randomMineMap(puzzle, mineCount) {
     const emptyCells = [];
     for (let r = 0; r < 9; r++) {
         for (let c = 0; c < 9; c++) {
@@ -191,44 +267,161 @@ function placeMines(puzzle, mineCount) {
     return mineMap;
 }
 
-// 计算每个格子周围的雷数
+// 同宫 8 邻格（不含自己）
+function getBoxNeighbors(row, col) {
+    const startRow = Math.floor(row / 3) * 3;
+    const startCol = Math.floor(col / 3) * 3;
+    const out = [];
+    for (let r = startRow; r < startRow + 3; r++) {
+        for (let c = startCol; c < startCol + 3; c++) {
+            if (r !== row || c !== col) out.push([r, c]);
+        }
+    }
+    return out;
+}
+
+// 每颗雷必须至少有 3 个同宫非雷邻格，保证可通过铲雷条件
+function allMinesShovelable(puzzle, mineMap) {
+    for (let r = 0; r < 9; r++) {
+        for (let c = 0; c < 9; c++) {
+            if (!mineMap[r][c]) continue;
+            let safe = 0;
+            for (const [nr, nc] of getBoxNeighbors(r, c)) {
+                if (!mineMap[nr][nc]) safe++;
+            }
+            if (safe < 3) return false;
+        }
+    }
+    return true;
+}
+
+// 用完整雷数约束检查雷布局是否唯一；唯一才说明玩家能推出来
+function isUniqueMineLayout(puzzle, mineMap, hintMap, mineCount) {
+    const assign = new Int8Array(81).fill(-1); // -1 未知 / 0 安全 / 1 雷
+    for (let r = 0; r < 9; r++) {
+        for (let c = 0; c < 9; c++) {
+            if (puzzle[r][c] !== 0) assign[r * 9 + c] = 0;
+        }
+    }
+
+    const constraints = [];
+    for (let r = 0; r < 9; r++) {
+        for (let c = 0; c < 9; c++) {
+            constraints.push({
+                target: hintMap[r][c],
+                idxs: getNeighbors(r, c).map(([nr, nc]) => nr * 9 + nc)
+            });
+        }
+    }
+
+    let solutions = 0;
+    let nodes = 0;
+    const deadline = Date.now() + 450;
+
+    function propagate() {
+        let changed = true;
+        while (changed) {
+            changed = false;
+            let mines = 0, unknown = 0;
+            for (let i = 0; i < 81; i++) {
+                if (assign[i] === 1) mines++;
+                else if (assign[i] === -1) unknown++;
+            }
+            if (mines > mineCount || mines + unknown < mineCount) return false;
+
+            for (const con of constraints) {
+                let need = con.target;
+                const unknownList = [];
+                for (const idx of con.idxs) {
+                    if (assign[idx] === 1) need--;
+                    else if (assign[idx] === -1) unknownList.push(idx);
+                }
+                if (need < 0 || need > unknownList.length) return false;
+                if (need === 0 || need === unknownList.length) {
+                    const val = need === 0 ? 0 : 1;
+                    for (const idx of unknownList) {
+                        if (assign[idx] === -1) {
+                            assign[idx] = val;
+                            changed = true;
+                        }
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
+    function search() {
+        if (solutions >= 2 || nodes++ > 30000 || Date.now() > deadline) return;
+        if (!propagate()) return;
+
+        let idx = -1;
+        for (let i = 0; i < 81; i++) {
+            if (assign[i] === -1) { idx = i; break; }
+        }
+        if (idx < 0) {
+            let mines = 0;
+            for (let i = 0; i < 81; i++) if (assign[i] === 1) mines++;
+            if (mines === mineCount) solutions++;
+            return;
+        }
+
+        for (const val of [1, 0]) {
+            assign[idx] = val;
+            search();
+            assign[idx] = -1;
+            if (solutions >= 2) return;
+        }
+    }
+
+    search();
+    return solutions === 1;
+}
+
+// 生成地雷布局：优先唯一且每颗雷可铲；失败时退回随机布局
+function placeMines(puzzle, mineCount) {
+    const attempts = 30;
+    const deadline = Date.now() + 1600;
+    let fallback = null;
+
+    for (let i = 0; i < attempts && Date.now() < deadline; i++) {
+        const mineMap = randomMineMap(puzzle, mineCount);
+        const hintMap = calculateHints(mineMap);
+        if (!fallback) fallback = mineMap;
+        if (!allMinesShovelable(puzzle, mineMap)) continue;
+        if (!isUniqueMineLayout(puzzle, mineMap, hintMap, mineCount)) continue;
+        mineMap.noGuess = true;
+        return mineMap;
+    }
+
+    fallback = fallback || randomMineMap(puzzle, mineCount);
+    fallback.noGuess = false;
+    return fallback;
+}
+
+// 计算每个格子周围的雷数（雷格也计算，用于全格徽标，避免暴露雷位）
 function calculateHints(mineMap) {
     const hintMap = Array.from({ length: 9 }, () => Array(9).fill(0));
     for (let r = 0; r < 9; r++) {
         for (let c = 0; c < 9; c++) {
-            if (mineMap[r][c]) {
-                hintMap[r][c] = -1; // 雷
-            } else {
-                let count = 0;
-                const neighbors = getNeighbors(r, c);
-                for (const [nr, nc] of neighbors) {
-                    if (mineMap[nr][nc]) count++;
-                }
-                hintMap[r][c] = count;
+            let count = 0;
+            const neighbors = getNeighbors(r, c);
+            for (const [nr, nc] of neighbors) {
+                if (mineMap[nr][nc]) count++;
             }
+            hintMap[r][c] = count;
         }
     }
     return hintMap;
 }
 
 // 判断某个格子是否应该显示红色提示
-// 条件：该格有数字（提示数字或玩家已填），且该数字恰好等于它周围的雷数
+// 只对题目给定数字生效；玩家填写的数字绝不生成雷提示，避免假线索
 function shouldShowHint(row, col, puzzle, playerGrid, hintMap) {
+    if (puzzle[row][col] === 0) return false;
     const hintCount = hintMap[row][col];
-    if (hintCount <= 0) return false; // 周围没雷或本身就是雷
-
-    // 获取该格的数字（提示数字或玩家填的数字）
-    let cellValue;
-    if (puzzle[row][col] !== 0) {
-        cellValue = puzzle[row][col]; // 提示数字
-    } else if (playerGrid[row][col] !== 0) {
-        cellValue = playerGrid[row][col]; // 玩家填的数字
-    } else {
-        return false; // 空格不显示
-    }
-
-    // 数字恰好等于周围雷数时才显示红色
-    return cellValue === hintCount;
+    if (hintCount <= 0) return false;
+    return puzzle[row][col] === hintCount;
 }
 
 // 检查是否胜利（数独完成 + 没有踩到雷）

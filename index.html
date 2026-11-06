@@ -128,7 +128,6 @@
             <span class="lg lg-hint">红底=雷数警示</span>
             <span class="lg lg-wrong">红字=错误</span>
             <span class="lg lg-shoveled">蓝底=已铲雷</span>
-            <span class="lg lg-nomine">白底=确认无雷</span>
             <span class="lg lg-clue">小数字=初始数字周围雷数</span>
         </div>
 
@@ -179,7 +178,7 @@
                 <p><strong>🪣 铲雷（长按）</strong><br>· 填数模式下点击选中一个空格子，长按它约半秒即可尝试铲雷<br>· 铲雷条件：与该雷相邻且同宫的格子中，至少有 3 个已填对的数字<br>· 铲雷成功后该格变蓝，并获得 1 个放大镜<br>· 铲雷次数不限</p>
                 <p><strong>🔍 放大镜</strong><br>· 铲雷成功可获得放大镜，点击"放大镜"按钮进入检查模式<br>· 点击一个已填满数字的宫，检查该宫内 9 个数字是否全部正确<br>· 全部正确：该宫变绿并显示✅；有错误：显示❌，错误数字标红<br>· 每次检查消耗 1 个放大镜</p>
                 <p><strong>✏️ 标记模式</strong><br>· 点击"标记"按钮进入标记模式<br>· 点击空格子选中，再点数字按钮添加候选标记（小数字）<br>· 再次点击已标记的数字可移除<br>· 回到填数模式填入数字后，同行、同列、同宫中相同的候选标记会自动清除</p>
-                <p><strong>💣 地雷提示</strong><br>· 只有题目初始数字格显示周围雷数，空格/玩家填入格不显示<br>· 题目初始数字等于该格相邻雷数时，整格变红<br>· 颜色说明：白字=题目 · 绿字=已填 · 红底=数字等于雷数 · 红字=错误 · 蓝底=已铲雷 · 白底=确认无雷</p>
+                <p><strong>💣 地雷提示</strong><br>· 只有题目初始数字格显示周围雷数，空格/玩家填入格不显示<br>· 题目初始数字等于该格相邻雷数时，整格变红<br>· 颜色说明：白字=题目 · 绿字=已填 · 红底=数字等于雷数 · 红字=错误 · 蓝底=已铲雷</p>
                 <p><strong>🏆 胜利条件</strong><br>· 铲除所有地雷，并正确填完所有空格</p>
             </div>
             <button class="action-btn new-game" id="rules-close-btn">知道了</button>
@@ -310,7 +309,6 @@
             checkedErrors: null, // 检查出的错误 {row: {col: true}}
             conflictGrid: null, // 数独语法冲突 {row: {col: true}}
             shoveled: null,     // 已铲除地雷的格子（9x9 布尔数组，蓝色背景 + 绿✓）
-            noMine: null,       // 长按确认没有雷的格子（9x9 布尔数组，白色背景）
             noGuess: false      // 本局是否通过无猜校验
         };
 
@@ -475,7 +473,6 @@
             state.checkedErrors = Array.from({ length: 9 }, () => ({}));
             state.conflictGrid = Array.from({ length: 9 }, () => ({}));
             state.shoveled = Array.from({ length: 9 }, () => Array(9).fill(false));
-            state.noMine = Array.from({ length: 9 }, () => Array(9).fill(false));
 
             // 放大镜模式重置
             magnifyMode = false;
@@ -637,11 +634,9 @@
                         cell.classList.add(boxState === 'correct' ? 'box-correct-tl' : 'box-wrong-tl');
                     }
 
-                    // 已铲除地雷：蓝底 + 绿✓；长按确认无雷：白底
+                    // 已铲除地雷：蓝底 + 绿✓
                     if (state.shoveled[r][c]) {
                         cell.classList.add('shoveled');
-                    } else if (state.noMine[r][c]) {
-                        cell.classList.add('no-mine');
                     }
 
                     // 踩雷爆炸效果
@@ -1043,16 +1038,13 @@
         function tryShovel(row, col) {
             if (state.gameOver) return;
             if (!state.mineMap[row][col]) {
-                state.noMine[row][col] = true;
-                showToast('🪣 这格没有地雷，已标白', '🪣');
-                renderGrid();
+                showToast('🪣 这格没有地雷', '🪣');
                 return;
             }
 
             if (canShovelMine(row, col)) {
                 state.mineMap[row][col] = false;
                 state.shoveled[row][col] = true; // 已铲雷：蓝底 + 绿✓
-                state.noMine[row][col] = false;
                 state.mineCount--;
                 state.hintMap = calculateHints(state.mineMap);
 

@@ -307,6 +307,8 @@ function isUniqueMineLayout(puzzle, mineMap, hintMap, mineCount) {
     const constraints = [];
     for (let r = 0; r < 9; r++) {
         for (let c = 0; c < 9; c++) {
+            // 只把“题目初始数字”作为可见线索；空格/玩家填入格不显示雷数
+            if (puzzle[r][c] === 0) continue;
             constraints.push({
                 target: hintMap[r][c],
                 idxs: getNeighbors(r, c).map(([nr, nc]) => nr * 9 + nc)

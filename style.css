@@ -228,19 +228,7 @@ h1 {
     color: #43a047;
 }
 
-/* 长按确认没有雷的格子 - 白色背景，方便记住查过哪里 */
-.sudoku-grid .cell.no-mine {
-    background: #ffffff;
-}
-
-.sudoku-grid .cell.no-mine:hover {
-    background: #f5f5f5;
-}
-
-.sudoku-grid .cell.no-mine.selected {
-    background: #ffffff !important;
-    box-shadow: inset 0 0 0 2px #ffd200;
-}
+/* 长按确认没有雷不改变格子外观 */
 
 /* 每格右下角：周围雷数徽标；0 用极淡样式，避免从有无徽标判断雷位 */
 .sudoku-grid .cell .mine-badge {
@@ -258,10 +246,6 @@ h1 {
 
 .sudoku-grid .cell .mine-badge.zero {
     opacity: .16;
-}
-
-.sudoku-grid .cell.no-mine .mine-badge {
-    color: #6b6b6b;
 }
 
 .sudoku-grid .cell.shoveled .mine-badge {
@@ -766,7 +750,6 @@ h1 {
 .lg-wrong { color: #ef5350; }
 .lg-wrong::before { background: transparent; border: 1.5px solid #ef5350; }
 .lg-shoveled::before { background: rgba(33, 150, 243, 0.65); }
-.lg-nomine::before { background: #ffffff; border: 1px solid #999; }
 .lg-clue::before { background: #b9c9d8; }
 
 /* 响应式 */

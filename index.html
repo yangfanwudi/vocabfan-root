@@ -129,7 +129,7 @@
             <span class="lg lg-wrong">红字=错误</span>
             <span class="lg lg-shoveled">蓝底=已铲雷</span>
             <span class="lg lg-nomine">白底=确认无雷</span>
-            <span class="lg lg-clue">小数字=周围雷数</span>
+            <span class="lg lg-clue">小数字=初始数字周围雷数</span>
         </div>
 
         <!-- 数字键盘 + 缩略图 合并区域（同一个大方框） -->
@@ -175,11 +175,11 @@
             <div class="rules-content">
                 <p><strong>📚 名词说明</strong><br>· <strong>行 / 列</strong>：横向一排 9 格为「行」，纵向一列为「列」<br>· <strong>宫</strong>：被白色粗线围住的 3×3 共 9 个格子，整个盘面共有 9 个宫<br>· <strong>相邻格子</strong>：与某格上下左右及斜向紧挨的格子（最多 8 个，盘面边缘的格子更少）</p>
                 <p><strong>🎯 目标</strong><br>完成数独的同时，找出并铲除所有地雷。</p>
-                <p><strong>🎮 基本玩法</strong><br>· 像普通数独一样填数字（1-9），每行、每列、每个宫内数字不重复<br>· 每格左下角的小数字 = 周围 8 格中的地雷数，所有格子都有<br>· 部分空格藏有地雷，填到地雷则游戏结束<br>· 题目给定数字正好等于相邻雷数时，格子变红提醒你附近有雷<br>· 有雷的格子必须先铲除，才能填数字</p>
+                <p><strong>🎮 基本玩法</strong><br>· 像普通数独一样填数字（1-9），每行、每列、每个宫内数字不重复<br>· 只有题目初始数字格显示小数字 = 周围 8 格中的地雷数<br>· 玩家填入的数字不显示雷数，也不会生成红底雷提示<br>· 题目初始数字正好等于相邻雷数时，格子变红提醒你附近有雷<br>· 有雷的格子必须先铲除，才能填数字</p>
                 <p><strong>🪣 铲雷（长按）</strong><br>· 填数模式下点击选中一个空格子，长按它约半秒即可尝试铲雷<br>· 铲雷条件：与该雷相邻且同宫的格子中，至少有 3 个已填对的数字<br>· 铲雷成功后该格变蓝，并获得 1 个放大镜<br>· 铲雷次数不限</p>
                 <p><strong>🔍 放大镜</strong><br>· 铲雷成功可获得放大镜，点击"放大镜"按钮进入检查模式<br>· 点击一个已填满数字的宫，检查该宫内 9 个数字是否全部正确<br>· 全部正确：该宫变绿并显示✅；有错误：显示❌，错误数字标红<br>· 每次检查消耗 1 个放大镜</p>
                 <p><strong>✏️ 标记模式</strong><br>· 点击"标记"按钮进入标记模式<br>· 点击空格子选中，再点数字按钮添加候选标记（小数字）<br>· 再次点击已标记的数字可移除<br>· 回到填数模式填入数字后，同行、同列、同宫中相同的候选标记会自动清除</p>
-                <p><strong>💣 地雷提示</strong><br>· 每格左下角的小数字 = 周围 8 格中的地雷数，0 也会淡淡显示<br>· 题目给定数字等于该格相邻雷数时，整格变红<br>· 颜色说明：白字=题目 · 绿字=已填 · 红底=数字等于雷数 · 红字=错误 · 蓝底=已铲雷 · 白底=确认无雷</p>
+                <p><strong>💣 地雷提示</strong><br>· 只有题目初始数字格显示周围雷数，空格/玩家填入格不显示<br>· 题目初始数字等于该格相邻雷数时，整格变红<br>· 颜色说明：白字=题目 · 绿字=已填 · 红底=数字等于雷数 · 红字=错误 · 蓝底=已铲雷 · 白底=确认无雷</p>
                 <p><strong>🏆 胜利条件</strong><br>· 铲除所有地雷，并正确填完所有空格</p>
             </div>
             <button class="action-btn new-game" id="rules-close-btn">知道了</button>
@@ -206,7 +206,7 @@
     <div class="content__inner">
       <h2>数独扫雷是什么？</h2>
       <p>它把两种经典玩法叠在一起：盘面仍然是标准 9×9 数独——每行、每列、每个 3×3 宫都要填入 1-9 且不重复；同时，部分空格下藏着地雷。你既要完成数独，又要在不踩雷的前提下把雷铲掉。</p>
-      <p>每格左下角的小数字 = 周围 8 格地雷数；题目给定数字正好等于该数字时，格子变红。铲雷需要条件——与该雷相邻且同宫的格子里，至少有 3 个已经填对的数字。填到地雷、或条件不满足硬铲，都会结束本局。每题都经过“数独逻辑可解 + 雷布局唯一 + 每颗雷可铲”校验。</p>
+      <p>只有题目初始数字格左下角显示小数字 = 周围 8 格地雷数；题目数字正好等于该数字时，格子变红。玩家填入的格子不显示雷数。铲雷需要条件——与该雷相邻且同宫的格子里，至少有 3 个已经填对的数字。填到地雷、或条件不满足硬铲，都会结束本局。</p>
 
       <h2>怎么玩：30 秒上手</h2>
       <ol class="steps">
@@ -619,11 +619,13 @@
                         cell.classList.add('hint');
                     }
 
-                    // 每格显示周围雷数（雷格也显示，避免从徽标有无判断雷位）
-                    const mineBadge = document.createElement('span');
-                    mineBadge.className = 'mine-badge' + (state.hintMap[r][c] === 0 ? ' zero' : '');
-                    mineBadge.textContent = state.hintMap[r][c];
-                    cell.appendChild(mineBadge);
+                    // 只有题目初始数字格显示周围雷数；玩家填入的格子不显示
+                    if (state.puzzle[r][c] !== 0) {
+                        const mineBadge = document.createElement('span');
+                        mineBadge.className = 'mine-badge' + (state.hintMap[r][c] === 0 ? ' zero' : '');
+                        mineBadge.textContent = state.hintMap[r][c];
+                        cell.appendChild(mineBadge);
+                    }
 
                     // 放大镜检查结果：通过的宫整宫变绿，宫左上角显示✅/❌徽标
                     const boxIdx = getBoxIndex(r, c);
